@@ -46,17 +46,25 @@ Traffic upload telah diamankan dan tidak dapat dibaca melalui packet capture.
 **🧰 Tech Stack**
 Backend & Framework
 
+<img width="280" height="280" alt="Laravel svg" src="https://github.com/user-attachments/assets/5af5555b-c0d3-4d94-8a3b-102234b25b96" />
+
+
+<img width="280" height="280" alt="63051368" src="https://github.com/user-attachments/assets/c003f319-569e-4b46-92ac-919f72915737" />
+
 Laravel – API backend untuk upload, enkripsi, validasi, dan akses file
 
 Blade – Template sederhana untuk antarmuka dasar
 
 Database & Storage
+![MySQL-Logo](https://github.com/user-attachments/assets/ab955de9-ab04-4f15-8dbd-1a67a4e9e891)
 
 MySQL (via XAMPP) – Penyimpanan metadata file dan log
 
 Local Storage / Object Storage – Menyimpan file terenkripsi
 
 Tools Pendukung
+
+<img width="225" height="225" alt="images (2)" src="https://github.com/user-attachments/assets/344ef359-4ab2-46a1-95bb-ba90b295ae65" />
 
 XAMPP – Web server + MySQL
 
@@ -73,4 +81,6 @@ Kontrol akses berbasis kredensial
 Dokumentasi arsitektur dan threat model (STRIDE)
 
 Bukti keamanan melalui pengujian
+
+
 

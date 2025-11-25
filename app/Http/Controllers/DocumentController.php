@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Document;
 use Illuminate\Support\Facades\Crypt; 
+use Illuminate\Support\Facades\Log;
+
 
 class DocumentController extends Controller
 {
@@ -16,34 +18,38 @@ class DocumentController extends Controller
 
     
     public function store(Request $request)
-    {
-       
-        $request->validate([
-            'file' => 'required|file|mimes:jpg,png,pdf|max:2048',
-            'document_type' => 'required|string|in:KTP,SLIP_GAJI',
-        ]);
+{
+    $request->validate([
+        'file' => 'required|file|mimes:jpg,png,pdf|max:2048',
+        'document_type' => 'required|string|in:KTP,SLIP_GAJI',
+    ]);
 
-        $file = $request->file('file');
-        
-        $fileContent = $file->get();
+    $file = $request->file('file');
+    $fileContent = $file->get();
 
-        $encryptedContent = Crypt::encrypt($fileContent);
+    $encryptedContent = Crypt::encrypt($fileContent);
 
-        $filename = uniqid() . '.enc';
-        $path = 'private_uploads/' . $filename;
+    $filename = uniqid() . '.enc';
+    $path = 'private_uploads/' . $filename;
 
-        Storage::disk('local')->put($path, $encryptedContent);
+    Storage::disk('local')->put($path, $encryptedContent);
 
-        Document::create([
-            'user_id' => auth()->id(), 
-            'document_type' => $request->document_type,
-            'original_filename' => $file->getClientOriginalName(),
-            'storage_path' => $path, 
-            'mime_type' => $file->getMimeType(),
-        ]);
+    $document = Document::create([
+        'user_id' => auth()->id(),
+        'document_type' => $request->document_type,
+        'original_filename' => $file->getClientOriginalName(),
+        'storage_path' => $path,
+        'mime_type' => $file->getMimeType(),
+    ]);
 
-        return redirect()->route('upload.create')->with('success', 'File berhasil diupload!');
-    }
+    Log::info('Upload berhasil', [
+        'user_id' => auth()->id(),
+        'doc_id' => $document->id,
+        'ip' => request()->ip(),
+    ]);
+
+    return redirect()->back()->with('success', 'Upload berhasil!');
+}
 
   
     public function download($id)

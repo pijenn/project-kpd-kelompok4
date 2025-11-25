@@ -22,7 +22,11 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/upload', [DocumentController::class, 'create'])->name('upload.create');
-    Route::post('/upload', [DocumentController::class, 'store'])->name('upload.store');
+
+    Route::post('/upload', [DocumentController::class, 'store'])
+        ->middleware('throttle:10,1')
+        ->name('upload.store');
 });
+
 
 require __DIR__.'/auth.php';

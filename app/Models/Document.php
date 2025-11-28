@@ -21,4 +21,9 @@ class Document extends Model
         'storage_path',
         'mime_type',
     ];
+
+    public function user() {
+    return $this->belongsTo(User::class);
+}
+
 }

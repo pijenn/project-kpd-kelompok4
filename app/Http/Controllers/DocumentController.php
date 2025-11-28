@@ -55,7 +55,7 @@ class DocumentController extends Controller
     public function download($id)
 {
     $document = Document::findOrFail($id); 
-    if (auth()->id() !== 1) {
+    if (auth()->id() !== 2) {
         
         abort(403, 'Akses Ditolak.');
     }
@@ -76,4 +76,11 @@ class DocumentController extends Controller
         echo $decryptedContent;
     }, $document->original_filename);
 }
+
+    public function admin()
+    {
+        $documents = Document::latest()->get();
+
+        return view('admin_dashboard', compact('documents'));
+    }
 }

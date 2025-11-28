@@ -12,21 +12,24 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/documents/{id}/download', [DocumentController::class, 'download'])->name('documents.download');
-
 Route::middleware('auth')->group(function () {
+    Route::get('/upload', [DocumentController::class, 'create'])->name('upload.create');
+    Route::post('/upload', [DocumentController::class, 'store'])
+        ->middleware('throttle:10,1')
+        ->name('upload.store');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware('auth')->group(function () {
-    Route::get('/upload', [DocumentController::class, 'create'])->name('upload.create');
 
-    Route::post('/upload', [DocumentController::class, 'store'])
-        ->middleware('throttle:10,1')
-        ->name('upload.store');
+Route::middleware(['auth', 'is_admin', 'password.confirm'])->prefix('admin')->group(function () {
+    
+    Route::get('/dashboard', [DocumentController::class, 'admin'])->name('admin.dashboard');
+
+    Route::get('/documents/{id}/download', [DocumentController::class, 'download'])->name('documents.download');
+
 });
-
 
 require __DIR__.'/auth.php';
